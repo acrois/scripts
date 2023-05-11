@@ -40,5 +40,6 @@ Flags:
         --apply             - disable dry run and do it for real
         --push              - push after applying
         --show              - show version tag (values: calendar, variant, revision)
+        --v                 - verbose output (`set -x`)
         --help              - prints this useful information
 ```

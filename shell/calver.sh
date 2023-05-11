@@ -148,6 +148,7 @@ usage() {
         "\t--apply             - disable dry run and do it for real\n" \
         "\t--push              - push after applying\n" \
         "\t--show              - show version tag (values: calendar, variant, revision)\n" \
+        "\t--v                 - verbose output (\`set -x\`)\n" \
         "\t--help              - prints this useful information\n" >&2
     exit 1
 }
@@ -179,6 +180,9 @@ while [ "$1" != "" ]; do
             ;;
         --show)
             SHOW=$VALUE
+            ;;
+        --v)
+            set -x
             ;;
         --help)
             usage
