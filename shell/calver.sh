@@ -11,7 +11,6 @@ set -eo pipefail
 BRANCH="trunk"
 FORMAT=
 DRY_RUN=true
-TESTING=false
 PUSH=false
 FROM_DATE=
 VARIANT=
@@ -180,9 +179,6 @@ while [ "$1" != "" ]; do
         --push)
             PUSH=true
             ;;
-        --test)
-            TESTING=true
-            ;;
         --variant)
             VARIANT=$VALUE
             ;;
@@ -217,12 +213,6 @@ _main() {
         echo "No version detected, aborting."
         exit 1
     fi
-
-    # if $TESTING; then
-    #     echo "TEST MODE"
-    #     test
-    #     exit
-    # fi
 
     FETCH=`git fetch --all 2>/dev/null`
     GIT_SHA=`git rev-parse HEAD`
@@ -315,35 +305,3 @@ _main() {
 if ! _is_sourced; then
 	_main "$@"
 fi
-
-test() {
-    # General configuration
-    git config --global user.email "cv@kinetech.llc"
-    git config --global user.name "Kinetech LLC"
-    git config --global protocol.file.allow always
-
-    # Create example repository
-    mkdir -p calver
-    cd calver
-    git init --initial-branch trunk
-
-    # Initial version
-    echo "# CalVer Test" > README.md
-    git add .
-    git commit -m "Initial commit"
-
-
-
-    # Make our first changes
-    git branch first-feature
-    echo "Jello World Feature" > jello.txt
-    git add .
-    git commit -m "feat: Jello World"
-
-
-    git status
-
-    rm -rf ./*
-    rm -rf .git
-
-}
