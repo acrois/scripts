@@ -8,7 +8,6 @@ set -eo pipefail
 # Author:      Aaron Croissette
 # Created:     2023.05.10
 
-BRANCH="trunk"
 FORMAT=
 DRY_RUN=true
 PUSH=false
@@ -134,14 +133,13 @@ usage() {
     format_variant --o='SEMIVER' --i=$VER --v=$VARIANT
 
     echo -e "\nUsage:\n" \
-        "\t$0 --branch \"$BRANCH\" --version \"$VER\" --variant \"$VARIANT\" --revision \"$REV\"\n" \
-        "\t$0 --from-date \"$FROM_DATE\" --variant \"$VARIANT\" --revision \"$REV\"\n" \
+        "\t$0 --version=\"$VER\" --variant=\"$VARIANT\" --revision=\"$REV\"\n" \
+        "\t$0 --from-date=\"$FROM_DATE\" --variant=\"$VARIANT\" --revision=\"$REV\"\n" \
         "\nOutput tags:\n" \
         "\tRevision:  $FULLVER\n" \
         "\tVariant:   $SEMIVER\n" \
         "\tCalendar:  $VER\n" \
         "\nFlags:\n" \
-        "\t--branch            - source of the branch where the tag comes from, defaults to $BRANCH\n" \
         "\t--format            - date format, defaults to %Y.%V.%w according to \`man date\`\n" \
         "\t--version           - version to release\n" \
         "\t--from-date         - date to base version off of\n" \
@@ -169,9 +167,6 @@ while [ "$1" != "" ]; do
             ;;
         --revision)
             REV=$VALUE
-            ;;
-        --branch)
-            BRANCH=$VALUE
             ;;
         --apply)
             DRY_RUN=false

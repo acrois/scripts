@@ -12,8 +12,8 @@ Scripts for making managing version control systems easier (read: automatic).
 
 ```
 Usage:
-        ./calver.sh --branch "trunk" --version "2023.19.03" --variant "dev" --revision "10"
-        ./calver.sh --from-date "2023-05-10" --variant "dev" --revision "10"
+        ./calver.sh --version="2023.19.03" --variant="dev" --revision="10"
+        ./calver.sh --from-date="2023-05-10" --variant="dev" --revision="10"
  
 Output tags:
         Revision:  2023.19.03-dev.10
@@ -21,7 +21,6 @@ Output tags:
         Calendar:  2023.19.03
  
 Flags:
-        --branch            - source of the branch where the tag comes from, defaults to trunk
         --format            - date format, defaults to %Y.%V.%w according to `man date`
         --version           - version to release
         --from-date         - date to base version off of
