@@ -21,6 +21,17 @@ Scripts for making managing version control systems easier (read: automatic).
 
 [shell/calver.sh](./shell/calver.sh) - Utility for automatically tagging git repositories using CalVer.
 
+#### Install
+
+Just want to install this one? The following will probably work for you:
+
+```sh
+sudo curl -o /usr/local/bin/calver.sh https://raw.githubusercontent.com/acrois/scripts/HEAD/shell/calver.sh
+sudo chmod +x /usr/local/bin/calver.sh
+```
+
+#### Usage
+
 ```
 Usage:
         calver.sh --version="2023.19.03" --variant="dev" --revision="10"
