@@ -11,6 +11,7 @@ set -eo pipefail
 FORMAT=
 DRY_RUN=true
 PUSH=false
+AUTO_VARIANT=false
 FROM_DATE=
 VARIANT=
 REV=0
@@ -23,13 +24,12 @@ tag() {
     local SHA=$1
     local TAG=$2
 
-    if [ ! -z $SHOW ]; then
-        echo "Adding $TAG"
-    fi
-
     if [ $DRY_RUN = false ]; then
-        git tag -d $TAG || true
-        git tag $TAG
+        git tag -d $TAG 2>/dev/null || true;
+        git tag $TAG;
+        echo "Tagged $TAG"
+    else
+        echo "Tag $TAG"
     fi
 }
 
@@ -143,7 +143,10 @@ usage() {
         "\t--format            - date format, defaults to %Y.%V.%w according to \`man date\`\n" \
         "\t--version           - version to release\n" \
         "\t--from-date         - date to base version off of\n" \
-        "\t--variant           - adds a variant incrementer e.g $LESSVER\n" \
+        "\t--auto              - automatically creates variants based on branch name.\n" \
+        "\t                        if on main, master, or trunk it is \"\".\n" \
+        "\t                        if there is no branch, it is \"detached\".\n" \
+        "\t--variant           - adds a variant tag e.g $LESSVER\n" \
         "\t--revision          - adds a revision incrementer after the variant e.g $FULLVER\n" \
         "\t--apply             - disable dry run and do it for real\n" \
         "\t--push              - push after applying\n" \
@@ -177,6 +180,9 @@ while [ "$1" != "" ]; do
             ;;
         --variant)
             VARIANT=$VALUE
+            ;;
+        --auto)
+            AUTO_VARIANT=true
             ;;
         --show)
             SHOW=$VALUE
@@ -212,12 +218,41 @@ _main() {
         echo "No version detected, aborting."
         exit 1
     fi
+    
+    if [ -z $SHOW ]; then
+        echo "Fetching metadata from git origin..."
+    fi
 
     FETCH=`git fetch --all 2>/dev/null`
     GIT_SHA=`git rev-parse HEAD`
+    BRANCH=`git branch --show-current`
     
     if [ -z $SHOW ]; then
-        echo "Current git SHA: $GIT_SHA"
+        echo "SHA: $GIT_SHA"
+        echo "Branch: $BRANCH"
+    fi
+
+    if [ $AUTO_VARIANT = true ]; then
+        vspec=false
+
+        if [[ -z $SHOW && ! -z $VARIANT ]]; then
+            echo "Variant specified: $VARIANT"
+            vspec=true
+        fi
+
+        if [[ "$BRANCH" =~ ^(trunk|main|master)$ ]]; then
+            VARIANT=;
+        elif [ -z $BRANCH ]; then
+            VARIANT='detached'
+        else
+            VARIANT=$BRANCH;
+        fi
+
+        if [[ -z $SHOW && ! -z $VARIANT ]]; then
+            echo "Variant set: $VARIANT"
+        elif [[ -z $SHOW && $vspec = true ]]; then
+            echo "Variant cleared"
+        fi
     fi
 
     if [ -z $SHOW ]; then
@@ -238,22 +273,21 @@ _main() {
 
     if [ ! -z $CURR_TAG ]; then
         CURR_TAG_SHA=`git rev-list -n 1 $CURR_TAG`
+        OLD_IFS=$IFS
+        IFS='.'
+        read -a CURR_TAG_PARTS <<< "$CURR_TAG"
+        IFS=$OLD_IFS
+        CURR_REV=${CURR_TAG_PARTS[3]}
 
         if [[ "$GIT_SHA" != "$CURR_TAG_SHA" ]]; then
-            OLD_IFS=$IFS
-            IFS='.'
-            read -a CURR_TAG_PARTS <<< "$CURR_TAG"
-            IFS=$OLD_IFS
-            CURR_REV=${CURR_TAG_PARTS[3]}
             REV="$((CURR_REV + 1))"
 
             if [ -z $SHOW ]; then
                 echo "Existing revision $CURR_REV, incrementing ours to $REV"
             fi
-        else
-            if [ -z $SHOW ]; then
-                echo "Existing revision $CURR_TAG, already tagged on our commit"
-            fi
+        elif [ -z $SHOW ]; then
+            REV="$((CURR_REV + 0))"
+            echo "Existing tag $CURR_TAG is our commit, using $REV"
         fi
     fi
 

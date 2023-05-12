@@ -25,17 +25,20 @@ Scripts for making managing version control systems easier (read: automatic).
 Usage:
         calver.sh --version="2023.19.03" --variant="dev" --revision="10"
         calver.sh --from-date="2023-05-10" --variant="dev" --revision="10"
- 
+
 Output tags:
         Revision:  2023.19.03-dev.10
         Variant:   2023.19.03-dev
         Calendar:  2023.19.03
- 
+
 Flags:
         --format            - date format, defaults to %Y.%V.%w according to `man date`
         --version           - version to release
         --from-date         - date to base version off of
-        --variant           - adds a variant incrementer e.g 
+        --auto              - automatically creates variants based on branch name.
+                                if on main, master, or trunk it is "".
+                                if there is no branch, it is "detached".
+        --variant           - adds a variant tag e.g
         --revision          - adds a revision incrementer after the variant e.g 2023.19.03-dev.10
         --apply             - disable dry run and do it for real
         --push              - push after applying
