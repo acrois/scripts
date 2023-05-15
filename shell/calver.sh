@@ -107,8 +107,8 @@ ver_for_date() {
     local myresult=
 
     if [ -z $FORMAT ]; then
-        # Fix for zero-padding the %w (day of week)
-        myresult="'$(printf "%s.%02d" $(date +%Y.%V -d "$FROM_DATE") $(date +%w -d "$FROM_DATE"))'"
+        # Fix for zero-padding the %u (day of week)
+        myresult="'$(printf "%s.%02d" $(date +%Y.%V -d "$FROM_DATE") $(date +%u -d "$FROM_DATE"))'"
     else
         myresult="'$(date +\"$FORMAT\" -d "$FROM_DATE")'"
     fi
@@ -134,15 +134,15 @@ usage() {
 
     echo -e "\nUsage:\n" \
         "\t$0 --version=\"$VER\" --variant=\"$VARIANT\" --revision=\"$REV\"\n" \
-        "\t$0 --from-date=\"$FROM_DATE\" --variant=\"$VARIANT\" --revision=\"$REV\"\n" \
+        "\t$0 --date=\"$FROM_DATE\" --variant=\"$VARIANT\" --revision=\"$REV\"\n" \
         "\nOutput tags:\n" \
         "\tRevision:  $FULLVER\n" \
         "\tVariant:   $SEMIVER\n" \
         "\tCalendar:  $VER\n" \
         "\nFlags:\n" \
-        "\t--format            - date format, defaults to %Y.%V.%w according to \`man date\`\n" \
+        "\t--format            - date format, defaults to %Y.%V.%u according to \`man date\`\n" \
         "\t--version           - version to release\n" \
-        "\t--from-date         - date to base version off of\n" \
+        "\t--date              - date to base version off of\n" \
         "\t--auto              - automatically creates variants based on branch name.\n" \
         "\t                        if on main, master, or trunk it is \"\".\n" \
         "\t                        if there is no branch, it is \"detached\".\n" \
@@ -211,7 +211,7 @@ _is_sourced() {
 
 _main() {
     if [ -z $VER ]; then
-        ver_for_date --o='VER' --fmt=$FORMAT
+        ver_for_date --o='VER' --fmt=$FORMAT --d=$FROM_DATE
     fi
 
     if [ -z $VER ]; then

@@ -43,9 +43,9 @@ Output tags:
         Calendar:  2023.19.03
 
 Flags:
-        --format            - date format, defaults to %Y.%V.%w according to `man date`
+        --format            - date format, defaults to %Y.%V.%u according to `man date`
         --version           - version to release
-        --from-date         - date to base version off of
+        --date              - date to base version off of
         --auto              - automatically creates variants based on branch name.
                                 if on main, master, or trunk it is "".
                                 if there is no branch, it is "detached".
