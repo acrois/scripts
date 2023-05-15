@@ -32,6 +32,7 @@ sudo chmod +x /usr/local/bin/calver.sh
 
 #### Usage
 
+[//]: # (using calver.sh)
 ```
 Usage:
         calver.sh --version="2023.19.03" --variant="dev" --revision="10"
@@ -58,3 +59,4 @@ Flags:
         --v                 - verbose output (`set -x`)
         --help              - prints this useful information
 ```
+[//]: # (used calver.sh)
