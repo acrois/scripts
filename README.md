@@ -35,7 +35,7 @@ sudo chmod +x /usr/local/bin/calver.sh
 ```
 Usage:
         calver.sh --version="2023.19.03" --variant="dev" --revision="10"
-        calver.sh --from-date="2023-05-10" --variant="dev" --revision="10"
+        calver.sh --date="2023-05-10" --variant="dev" --revision="10"
 
 Output tags:
         Revision:  2023.19.03-dev.10
@@ -51,6 +51,7 @@ Flags:
                                 if there is no branch, it is "detached".
         --variant           - adds a variant tag e.g
         --revision          - adds a revision incrementer after the variant e.g 2023.19.03-dev.10
+        --prefix            - adds a prefix in front of the version e.g node/2023.19.03-dev.10
         --apply             - disable dry run and do it for real
         --push              - push after applying
         --show              - show version tag (values: calendar, variant, revision)

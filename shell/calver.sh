@@ -15,6 +15,7 @@ AUTO_VARIANT=false
 FROM_DATE=
 VARIANT=
 REV=0
+PREFIX=
 FULLVER=
 SEMIVER=
 VER=
@@ -148,6 +149,7 @@ usage() {
         "\t                        if there is no branch, it is \"detached\".\n" \
         "\t--variant           - adds a variant tag e.g $LESSVER\n" \
         "\t--revision          - adds a revision incrementer after the variant e.g $FULLVER\n" \
+        "\t--prefix            - adds a prefix in front of the version e.g node/$FULLVER\n" \
         "\t--apply             - disable dry run and do it for real\n" \
         "\t--push              - push after applying\n" \
         "\t--show              - show version tag (values: calendar, variant, revision)\n" \
@@ -162,6 +164,9 @@ while [ "$1" != "" ]; do
     case $PARAM in
         --version)
             VER=$VALUE
+            ;;
+        --prefix)
+            PREFIX=$VALUE
             ;;
         --format)
             FORMAT=$VALUE
@@ -212,6 +217,10 @@ _is_sourced() {
 _main() {
     if [ -z $VER ]; then
         ver_for_date --o='VER' --fmt=$FORMAT --d=$FROM_DATE
+    fi
+
+    if [ ! -z $PREFIX ]; then
+        VER="$PREFIX/$VER"
     fi
 
     if [ -z $VER ]; then
