@@ -29,6 +29,10 @@ tag() {
         git tag -d $TAG 2>/dev/null || true;
         git tag $TAG;
         echo "Tagged $TAG"
+
+        if [ $PUSH = true ]; then
+            git push origin -f --tags
+        fi
     else
         echo "Tag $TAG"
     fi
@@ -337,10 +341,6 @@ _main() {
 
     # You are always tagging a revision
     tag $GIT_SHA $FULLVER
-
-    if [[ $DRY_RUN = false && $PUSH != false ]]; then
-        git push origin --tags -f
-    fi
 }
 
 # If we are sourced from elsewhere, don't perform any further actions
