@@ -27,12 +27,18 @@ tag() {
 
     if [ $DRY_RUN = false ]; then
         git tag -d $TAG 2>/dev/null || true;
+
+        if [[ $PUSH = true && $? -eq 0 ]]; then
+            git push origin :refs/tags/$TAG
+        fi
+
         git tag $TAG;
-        echo "Tagged $TAG"
 
         if [ $PUSH = true ]; then
-            git push origin -f --tags
+            git push origin :refs/tags/$TAG
         fi
+
+        echo "Tagged $TAG"
     else
         echo "Tag $TAG"
     fi
