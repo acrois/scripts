@@ -57,17 +57,19 @@ _main() {
         prepare | restore)
             SOURCE_FILE=$1
 
+            # Requires source file
             if [ -z $SOURCE_FILE ]; then
                 echo "No source file specified!"
                 exit 1
             fi
-            shift
+            shift # Remove file
             ;;
         --help | help)
             usage
             ;;
     esac
 
+    # Print and yell about source files
     if [ ! -z $SOURCE_FILE ]; then
         echo "Source: $SOURCE_FILE"
 
@@ -87,6 +89,7 @@ _main() {
         echo "Target: $TARGET_FILE"
     fi
 
+    # Process flags/options
     while [ "$1" != "" ]; do
         PARAM=`echo $1 | awk -F= '{print $1}'`
         VALUE=`echo $1 | awk -F= '{print $2}'`
@@ -108,7 +111,6 @@ _main() {
                 ;;
             --strip-data)
                 if [ ! -z $VALUE ]; then
-                    # TODO multiple times prepend "\|"
                     STRIP_TABLE_DATA="${STRIP_TABLE_DATA:+$STRIP_TABLE_DATA\|}$VALUE"
                 fi
                 ;;
