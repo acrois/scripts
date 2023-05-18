@@ -1,5 +1,6 @@
 name: Build Image
 on:
+  workflow_dispatch:
   push:
 concurrency: build-image
 env:
