@@ -1,5 +1,7 @@
 # Scripts
 
+[![Build Image](https://github.com/acrois/scripts/actions/workflows/build.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/build.yaml)
+
 Shell scripts and whatnot.
 
 ## Setup
@@ -12,6 +14,14 @@ git clone https://github.com/acrois/scripts ~/scripts
 ```
 
 [config.sh](./config.sh) adds a call to `source` to the end of your `~/.profile` that points to the [config/.profile](./config/.profile) from `~/scripts/` which sets the `$PATH` environmental variable to include `~/scripts/shell` so that you may clone and call shell scripts.
+
+## Docker
+
+Can be run from anywhere, based on the latest Alpine image.
+
+```sh
+docker run --rm ghcr.io/acrois/scripts calver.sh --help
+```
 
 ## Version Control
 
