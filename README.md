@@ -70,3 +70,34 @@ Flags:
         --help              - prints this useful information
 ```
 [//]: # (used calver.sh)
+
+### Git Branch Archival
+
+[shell/bclean.sh](./shell/bclean.sh) - Utility for archiving (deleting) old branches while preserving history using tags.
+
+#### Install
+
+Just want to install this one? The following will probably work for you:
+
+```sh
+sudo curl -o /usr/local/bin/bclean.sh https://raw.githubusercontent.com/acrois/scripts/HEAD/shell/bclean.sh
+sudo chmod +x /usr/local/bin/bclean.sh
+```
+
+#### Usage
+
+[//]: # (using bclean.sh)
+```
+Usage:
+        bclean.sh --test --push --apply
+
+Flags:
+        --keep [branch]     - keep a branch by name
+        --path [path]       - path to git repository
+        --test              - creates a git repository to self-test the cleanup procedure
+        --apply             - disable dry run and do it for real
+        --push, -p          - push after applying
+        --v                 - verbose output (`set -x`)
+        --help              - prints this useful information
+```
+[//]: # (used bclean.sh)
