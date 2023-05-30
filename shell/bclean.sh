@@ -5,6 +5,7 @@ TEST_MODE=false
 PUSH=false
 DRY_RUN=true
 REPO_PATH=
+ANNOTATED_TAGS=true
 KEEP_BRANCHES="trunk master main"
 
 # list_include_item "10 11 12" "2"
@@ -28,6 +29,7 @@ usage() {
         "\t--path [path]       - path to git repository\n" \
         "\t--test              - creates a git repository to self-test the cleanup procedure\n" \
         "\t--apply             - disable dry run and do it for real\n" \
+        "\t--unannotated       - do not use annotated tags\n" \
         "\t--push, -p          - push after applying\n" \
         "\t--v                 - verbose output (\`set -x\`)\n" \
         "\t--help              - prints this useful information\n" >&2
@@ -59,6 +61,9 @@ while [ "$1" != "" ]; do
             ;;
         --keep)
             KEEP_BRANCHES="$KEEP_BRANCHES $VALUE"
+            ;;
+        --unannotated)
+            ANNOTATED_TAGS=false
             ;;
         *)
             echo "Unrecognized $PARAM"
@@ -136,7 +141,12 @@ _main() {
         echo "Processing $branch_name"
 
         # Tag branch
-        git -C $REPO_PATH tag "archive/$current_date/$branch_name" -a -m "Archive $current_date" $branch_name
+
+        if [ $ANNOTATED_TAGS = true ]; then
+            git -C $REPO_PATH tag "archive/$current_date/$branch_name" -a -m "Archive of $branch_name on $current_date" $branch_name
+        else
+            git -C $REPO_PATH tag "archive/$current_date/$branch_name" $branch_name
+        fi
 
         # Delete branch
         git -C $REPO_PATH branch -D $branch_name
