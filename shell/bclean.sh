@@ -4,7 +4,7 @@ set -eo pipefail
 TEST_MODE=false
 PUSH=false
 DRY_RUN=true
-REPO_PATH=
+REPO_PATH=./
 ANNOTATED_TAGS=true
 KEEP_BRANCHES="trunk master main"
 
@@ -26,7 +26,7 @@ usage() {
         "\t$0 --test --push --apply\n" \
         "\nFlags:\n" \
         "\t--keep [branch]     - keep a branch by name\n" \
-        "\t--path [path]       - path to git repository\n" \
+        "\t--path [path]       - path to git repository, default to current directory\n" \
         "\t--test              - creates a git repository to self-test the cleanup procedure\n" \
         "\t--apply             - disable dry run and do it for real\n" \
         "\t--unannotated       - do not use annotated tags\n" \
