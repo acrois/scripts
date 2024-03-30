@@ -1,0 +1,4 @@
+[submodule ".github/template/calver"]
+	path = .github/template/calver
+	url = git@github.com:acrois/calver.git
+	branch = trunk
