@@ -17,4 +17,4 @@ COPY config.sh .
 COPY config ./config
 RUN ./config.sh
 
-COPY shell ./shell
+COPY shell/* ./shell/
