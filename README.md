@@ -9,7 +9,7 @@ Shell scripts and whatnot.
 Intended for Linux. WSL works fine.
 
 ```sh
-git clone https://github.com/acrois/scripts ~/scripts
+git clone --recurse-submodules https://github.com/acrois/scripts ~/scripts
 ~/scripts/config.sh
 ```
 
@@ -36,7 +36,7 @@ Scripts for making managing version control systems easier (read: automatic).
 Just want to install this one? The following will probably work for you:
 
 ```sh
-sudo curl -o /usr/local/bin/calver.sh https://raw.githubusercontent.com/acrois/scripts/HEAD/shell/calver.sh
+sudo curl -o /usr/local/bin/calver.sh https://raw.githubusercontent.com/acrois/calver/HEAD/calver.sh
 sudo chmod +x /usr/local/bin/calver.sh
 ```
 
