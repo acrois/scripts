@@ -2,3 +2,9 @@
 	path = .github/template/calver
 	url = git@github.com:acrois/calver.git
 	branch = trunk
+[submodule ".github/template/terraform-deploy"]
+	path = .github/template/terraform-deploy
+	url = git@github.com:acrois/terraform-deploy
+[submodule ".github/template/terraform-prepare"]
+	path = .github/template/terraform-prepare
+	url = git@github.com:acrois/terraform-prepare
