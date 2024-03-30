@@ -1,1 +1,1 @@
-../.github/workflows/template/calver/calver.sh
+../.github/template/calver/calver.sh
