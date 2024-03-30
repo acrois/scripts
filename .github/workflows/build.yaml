@@ -27,6 +27,14 @@ jobs:
         with:
           string: ${{ env.TAG }}
 
+      - name: Wait for tagging to succeed
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Tag revision'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
@@ -63,13 +71,52 @@ jobs:
             type=ref,event=tag,priority=300
             type=raw,priority=150,value=latest,enable={{is_default_branch}}
 
+      # Retrieve all repository tags from the GitHub API using undocumented API call to get all tags
+      # https://github.com/actions/github-script
+      - name: Get all tags
+        id: all-tags
+        uses: actions/github-script@v6
+        with:
+          script: |
+            return github.rest.repos.listTags({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            })
+
+      # Prepare JSON output for Unix command line
+      # https://github.com/mad9000/actions-find-and-replace-string
+      - name: Format jq result
+        id: formatted-jq
+        uses: mad9000/actions-find-and-replace-string@2
+        with:
+          source: ${{ steps.all-tags.outputs.result }}
+          find: "'"
+          replace: "\\'"
+
+      # Parse Github API output and search for tags only matching the current commit SHA
+      - name: Search all tags for commit
+        id: tag-results
+        run: |
+          tags=$( echo '${{ steps.formatted-jq.outputs.value }}' | jq -r ".data | .[] | select( .commit.sha == \"${{ github.sha }}\" ) | .name" | tr '\n' ' ' )
+          echo "tags=${tags}" >> $GITHUB_OUTPUT
+
+      # Merge the tag lists from docker/metadata-action and GitHub API
+      - name: Build tag list
+        id: tag-list
+        run: |
+          echo ::set-output name=tags::"$(
+            echo -n "${{ steps.meta.outputs.tags }}" | tr '\n' ','
+            for r in `echo "${{ steps.tag-results.outputs.tags }}" | tr '\n' ' '`; do echo -n ,${{ steps.registry.outputs.lowercase }}${{ steps.image.outputs.lowercase }}:$r | tr '[:upper:]' '[:lower:]'; done
+          )"
+
       - name: Build Image
         uses: docker/build-push-action@v4
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.tag-list.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
