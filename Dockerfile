@@ -3,15 +3,19 @@ RUN apk add --no-cache bash git \
     && rm -rf /var/cache/*/* \
     && echo "" > /root/.ash_history
 
-# change default shell from ash to bash
-RUN sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
+# add user and group, change default shell from ash to bash
+RUN addgroup -g 1000 you && \
+  adduser -G you -u 1000 you -D && \
+  sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
+
+USER 1000:1000
 
 ENV LC_ALL=en_US.UTF-8
-ENV ENV="/etc/profile"
-RUN echo ". $HOME/.profile" > /etc/profile
+# ENV ENV="/home/you/.profile"
+# RUN echo ". $HOME/.profile" > /etc/profile
 ENTRYPOINT [ "bash", "-l" ]
 
-WORKDIR /root/scripts/
+WORKDIR /home/you/scripts/
 
 COPY config.sh .
 COPY config ./config
