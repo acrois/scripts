@@ -1,6 +1,6 @@
 # Scripts
 
-[![Build Image](https://github.com/acrois/scripts/actions/workflows/build.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/build.yaml)
+[![Build Image](https://github.com/acrois/scripts/actions/workflows/build.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/build.yaml) [![CalVer Tagging](https://github.com/acrois/scripts/actions/workflows/calver.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/calver.yaml)
 
 Shell scripts and whatnot.
 

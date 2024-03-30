@@ -1,5 +1,5 @@
 FROM alpine:latest
-RUN apk add --no-cache bash \
+RUN apk add --no-cache bash git \
     && rm -rf /var/cache/*/* \
     && echo "" > /root/.ash_history
 
@@ -17,4 +17,7 @@ COPY config.sh .
 COPY config ./config
 RUN ./config.sh
 
-COPY shell/* ./shell/
+RUN --mount=type=bind,source=.,target=/context cp -LRa /context/shell ./shell
+#COPY shell ./shell
+
+WORKDIR /run
