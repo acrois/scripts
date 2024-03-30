@@ -26,7 +26,7 @@ COPY config.sh .
 COPY config ./config
 RUN ./config.sh
 
-RUN --mount=type=bind,source=.,target=/context cp -LRa /context/shell ./shell
+RUN --mount=type=bind,source=.,target=/context cp -LR /context/shell ./shell
 #COPY shell ./shell
 
 WORKDIR /run
