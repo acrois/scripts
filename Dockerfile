@@ -1,5 +1,10 @@
 FROM alpine:latest
-RUN apk add --no-cache bash git \
+RUN apk add \
+        --update \
+        --no-cache \
+      bash \
+      git \
+      coreutils \
     && rm -rf /var/cache/*/* \
     && echo "" > /root/.ash_history
 
