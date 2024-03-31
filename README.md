@@ -4,9 +4,17 @@
 
 Shell scripts and whatnot.
 
+## Docker Usage
+
+Can be run from anywhere, based on the latest Alpine image.
+
+```sh
+docker run --rm ghcr.io/acrois/scripts:latest calver --help
+```
+
 ## Setup
 
-Intended for Linux. WSL works fine.
+Intended for Linux-based environments. WSL works fine. Windows will probably not work due to symlinks.
 
 ```sh
 git clone --recurse-submodules https://github.com/acrois/scripts ~/scripts
@@ -14,14 +22,6 @@ git clone --recurse-submodules https://github.com/acrois/scripts ~/scripts
 ```
 
 [config.sh](./config.sh) adds a call to `source` to the end of your `~/.profile` that points to the [config/.profile](./config/.profile) from `~/scripts/` which sets the `$PATH` environmental variable to include `~/scripts/shell` so that you may clone and call shell scripts.
-
-## Docker
-
-Can be run from anywhere, based on the latest Alpine image.
-
-```sh
-docker run --rm ghcr.io/acrois/scripts calver.sh --help
-```
 
 ## Version Control
 
