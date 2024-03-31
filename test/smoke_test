@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+echo "Is your test smoking? Please consult a doctor if it is not smoking. Smoke is normal. Just don't inhale it." > test/output/passing.txt
+exit 0

@@ -1,0 +1,50 @@
+name: Dynamic Test Execution
+on: [push]
+jobs:
+  prepare-execution-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Prepare Execution Matrix
+        id: set-matrix
+        run: |
+          EXEC_FILES=$(find test -type f -executable | jq -R -s -c 'split("\n")[:-1]')
+          echo 'MATRIX<<EOF' >> $GITHUB_OUTPUT
+          echo $EXEC_FILES >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.MATRIX }}
+  execute-scripts:
+    needs: prepare-execution-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        script: ${{ fromJson(needs.prepare-execution-matrix.outputs.matrix) }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          cache: 'pip'
+          python-version: '3.x'
+      - id: setup-env
+        name: Set up Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          echo "TEST_NAME=${TEST_SCRIPT//\//-}" >> $GITHUB_OUTPUT
+        env:
+          TEST_SCRIPT: ${{ matrix.script }}
+      - name: Execute Script
+        run: ./${{ matrix.script }}
+      - name: Upload Output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: output-${{ steps.setup-env.outputs.TEST_NAME }}
+          path: ./test/output
