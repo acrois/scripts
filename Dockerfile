@@ -19,7 +19,8 @@ USER 1000:1000
 ENV LC_ALL=en_US.UTF-8
 # ENV ENV="/home/you/.profile"
 # RUN echo ". $HOME/.profile" > /etc/profile
-ENTRYPOINT [ "bash", "-l", "-c" ]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
 
 WORKDIR /home/you/scripts/
 
