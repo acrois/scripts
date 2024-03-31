@@ -1,0 +1,5 @@
+# should be fine ## bootstrap
+not a commented line ## bootstrap
+// doesn't match
+// does match /// comms
+also matches /// comms
