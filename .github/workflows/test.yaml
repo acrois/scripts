@@ -30,11 +30,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          cache: 'pip'
+          # cache: 'pip'
           python-version: '3.x'
       - id: setup-env
         name: Set up Bun
         run: |
+          mkdir -p -- "$(pip cache dir)"
           curl -fsSL https://bun.sh/install | bash
           echo "$HOME/.bun/bin" >> $GITHUB_PATH
           echo "TEST_NAME=${TEST_SCRIPT//\//-}" >> $GITHUB_OUTPUT
