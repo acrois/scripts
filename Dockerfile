@@ -5,6 +5,7 @@ RUN apk add \
       bash \
       git \
       coreutils \
+      python3 \
     && rm -rf /var/cache/*/* \
     && echo "" > /root/.ash_history
 
