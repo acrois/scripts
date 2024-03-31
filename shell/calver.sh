@@ -1,1 +1,1 @@
-../.github/template/calver/calver.sh
+calver
