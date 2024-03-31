@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+import sys
+import os
+import unittest
+
+# Calculate the absolute path to the '../shell/' directory
+shell_directory_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'shell'))
+
+# Add this directory to sys.path
+sys.path.append(shell_directory_path)
+
+from toggle_comment import detect_end_comment_pattern, is_line_commented, toggle_comment_on_line, toggle_comments_with_dynamic_n
+
+class TestToggleComments(unittest.TestCase):
+
+    def test_detect_end_comment_pattern(self):
+        self.assertEqual(detect_end_comment_pattern("some code // bootstrap", "bootstrap"), 2)
+        self.assertEqual(detect_end_comment_pattern("code again /// flag", "flag"), 3)
+        self.assertIsNone(detect_end_comment_pattern("no comment pattern here", "here"))
+
+    def test_is_line_commented(self):
+        self.assertTrue(is_line_commented("# Commented line", 2))
+        self.assertFalse(is_line_commented("Not commented", 2))
+        self.assertTrue(is_line_commented("## Commented with two chars", 3))
+
+    def test_toggle_comment_on_line(self):
+        # Enforcing comment
+        self.assertEqual(toggle_comment_on_line("Line to comment", 2, False, True), "# Line to comment")
+        # Enforcing uncomment, on already commented line
+        self.assertEqual(toggle_comment_on_line("# Commented line", 2, True, False), "Commented line")
+        # Toggling without enforcement (commenting)
+        self.assertEqual(toggle_comment_on_line("Line to toggle", 2, False), "# Line to toggle")
+        # Toggling without enforcement (uncommenting)
+        self.assertEqual(toggle_comment_on_line("# Toggled line", 2, True), "Toggled line")
+
+    def test_toggle_comments_with_dynamic_n(self):
+        lines = [
+            "Action: Initialize module ## bootstrap",
+            "# Setup user permissions ## bootstrap",
+            "Perform database migration ## migration",
+            "Generate reports for analytics // analytics",
+            "Cleanup temporary files // cleanup"
+        ]
+        group_word = "bootstrap"
+        toggled_lines = toggle_comments_with_dynamic_n(lines, group_word)
+        expected_lines = [
+            "# Action: Initialize module ## bootstrap", # Flipped
+            "Setup user permissions ## bootstrap", # Flipped
+            "Perform database migration ## migration", # Unchanged
+            "Generate reports for analytics // analytics", # Unchanged
+            "Cleanup temporary files // cleanup" # Unchanged
+        ]
+        self.assertEqual(toggled_lines, expected_lines)
+
+if __name__ == "__main__":
+    unittest.main()
