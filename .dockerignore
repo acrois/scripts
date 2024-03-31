@@ -2,3 +2,5 @@
 !.github/template/calver/calver*
 .dockerignore
 .editorconfig
+__pycache__
+.vscode
