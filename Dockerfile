@@ -19,7 +19,7 @@ USER 1000:1000
 ENV LC_ALL=en_US.UTF-8
 # ENV ENV="/home/you/.profile"
 # RUN echo ". $HOME/.profile" > /etc/profile
-ENTRYPOINT [ "bash", "-l" ]
+ENTRYPOINT [ "bash", "-l", "-c" ]
 
 WORKDIR /home/you/scripts/
 
