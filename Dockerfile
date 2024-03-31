@@ -1,34 +1,43 @@
 FROM alpine:latest
-RUN apk add \
-        --update \
-        --no-cache \
-      bash \
-      git \
-      coreutils \
-      python3 \
-    && rm -rf /var/cache/*/* \
-    && echo "" > /root/.ash_history
-
-# add user and group, change default shell from ash to bash
-RUN addgroup -g 1000 you && \
-  adduser -G you -u 1000 you -D && \
-  sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
-
-USER 1000:1000
 
 ENV LC_ALL=en_US.UTF-8
-# ENV ENV="/home/you/.profile"
-# RUN echo ". $HOME/.profile" > /etc/profile
+
+# add user and group
+RUN addgroup -g 1000 you && \
+  adduser -G you -u 1000 you -D
+
+# install dependencies and change default shell from ash to bash
+RUN \
+  --mount=type=cache,target=/var/cache/apk \
+  apk add \
+    --update \
+    bash \
+    git \
+    coreutils \
+    python3 \
+  && apk add \
+    --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
+    git-filter-repo \
+  && sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd \
+  && echo "" > /root/.ash_history
+
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
 
+USER 1000:1000
 WORKDIR /home/you/scripts/
 
 COPY config.sh .
 COPY config ./config
 RUN ./config.sh
 
+# ENV ENV="/home/you/.profile"
+# RUN echo ". $HOME/.profile" > /etc/profile
+
+# Copy all shell scripts, dereference links to get full files
 RUN --mount=type=bind,source=.,target=/context cp -LR /context/shell ./shell
-#COPY shell ./shell
+
+# Old way to copy shell scripts does not work with symlinks
+# COPY shell ./shell
 
 WORKDIR /run

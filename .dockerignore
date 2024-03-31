@@ -1,4 +1,4 @@
 .git*
-!.github/template
+!.github/template/calver/calver.sh
 .dockerignore
 .editorconfig
