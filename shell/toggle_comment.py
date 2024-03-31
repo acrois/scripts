@@ -19,16 +19,25 @@ def is_line_commented(line, n):
 
 def toggle_comment_on_line(line, n, is_commented, enforce_state=None):
     """Toggles comment status of a line, with an option to enforce a specific state."""
+    # Determine whether to add or remove comments based on the enforce_state and current state
     if enforce_state is not None:
-        should_comment = enforce_state
+        should_comment = enforce_state and not is_commented
+        should_uncomment = not enforce_state and is_commented
     else:
+        # Toggle the comment if no enforce_state is provided
         should_comment = not is_commented
+        should_uncomment = is_commented
 
     if should_comment:
+        # Add n-1 leading comment characters if the line should be commented
         indentation = re.match(r"^(\s*)", line).group(1)
         new_line = f"{indentation}{'#' * (n-1)} {line.lstrip()}"
-    else:
+    elif should_uncomment:
+        # Remove leading comment characters if the line should be uncommented
         new_line = re.sub(r"^[^\s\w]{" + str(n-1) + r"}\s?", "", line, 1)
+    else:
+        # Leave the line unchanged if it already meets the desired state
+        new_line = line
 
     return new_line
 
