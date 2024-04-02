@@ -37,10 +37,11 @@ RUN --mount=type=bind,source=.,target=/context cp -LR /context/shell ./shell
 # Old way to copy shell scripts does not work with symlinks
 # COPY shell ./shell
 
-# add user and group
+# add user and group, copy skel to root too
 RUN addgroup -g 1000 you && \
   adduser -G you -u 1000 you -D && \
-  adduser -G you -u 1001 gha -D
+  adduser -G you -u 1001 gha -D && \
+  cp -r /etc/skel/. ~
 
 # USER 1000:1000
 WORKDIR /run
