@@ -42,5 +42,5 @@ RUN addgroup -g 1000 you && \
   adduser -G you -u 1000 you -D && \
   adduser -G you -u 1001 gha -D
 
-USER 1000:1000
+# USER 1000:1000
 WORKDIR /run
