@@ -22,6 +22,7 @@ class TestToggleComments(unittest.TestCase):
         self.assertTrue(is_line_commented("# Commented line", 2))
         self.assertFalse(is_line_commented("Not commented", 2))
         self.assertTrue(is_line_commented("## Commented with two chars", 3))
+        self.assertTrue(is_line_commented(" # Commented line", 2))
 
     def test_toggle_comment_on_line(self):
         # Enforcing comment
@@ -39,7 +40,8 @@ class TestToggleComments(unittest.TestCase):
             "# Setup user permissions ## bootstrap",
             "Perform database migration ## migration",
             "Generate reports for analytics // analytics",
-            "Cleanup temporary files // cleanup"
+            "Cleanup temporary files // cleanup",
+            "  # Something with some spaces ## bootstrap"
         ]
         group_word = "bootstrap"
         toggled_lines = toggle_comments_with_dynamic_n(lines, group_word)
@@ -48,7 +50,8 @@ class TestToggleComments(unittest.TestCase):
             "Setup user permissions ## bootstrap", # Flipped
             "Perform database migration ## migration", # Unchanged
             "Generate reports for analytics // analytics", # Unchanged
-            "Cleanup temporary files // cleanup" # Unchanged
+            "Cleanup temporary files // cleanup", # Unchanged
+            "  Something with some spaces ## bootstrap"
         ]
         self.assertEqual(toggled_lines, expected_lines)
 
