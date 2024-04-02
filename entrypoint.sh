@@ -6,9 +6,13 @@ CMD="$*"
 
 # if ! command -v calver &> /dev/null
 # then
-#   echo "Commands could not be found, sourcing profile"
 #   source ~/scripts/config/.profile
 # fi
+
+if [ ! -f ~/scripts/config/.profile ]; then
+  echo "Commands could not be found, copying to home"
+  cp -r /etc/skel/. ~
+fi
 
 # Execute the command string in a login shell
 exec bash -l -c "$CMD"
