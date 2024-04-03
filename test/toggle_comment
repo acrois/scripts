@@ -14,25 +14,27 @@ from toggle_comment import detect_end_comment_pattern, is_line_commented, toggle
 class TestToggleComments(unittest.TestCase):
 
     def test_detect_end_comment_pattern(self):
-        self.assertEqual(detect_end_comment_pattern("some code // bootstrap", "bootstrap"), 2)
-        self.assertEqual(detect_end_comment_pattern("code again /// flag", "flag"), 3)
-        self.assertIsNone(detect_end_comment_pattern("no comment pattern here", "here"))
+        self.assertIsNotNone(detect_end_comment_pattern("some code // bootstrap"))
+        self.assertIsNotNone(detect_end_comment_pattern("code again /// flag"))
+        self.assertIsNone(detect_end_comment_pattern("no comment pattern here"))
 
     def test_is_line_commented(self):
-        self.assertTrue(is_line_commented("# Commented line", 2))
-        self.assertFalse(is_line_commented("Not commented", 2))
-        self.assertTrue(is_line_commented("## Commented with two chars", 3))
-        self.assertTrue(is_line_commented(" # Commented line", 2))
+        self.assertTrue(is_line_commented("# Commented line", '#', 1))
+        self.assertFalse(is_line_commented("Not commented", '/', 2))
+        self.assertTrue(is_line_commented("## Commented with two chars", '#', 2))
+        self.assertTrue(is_line_commented(" # Commented line", '#', 1))
+        self.assertTrue(is_line_commented(" # } ## bootstrap", '#', 1))
 
     def test_toggle_comment_on_line(self):
         # Enforcing comment
-        self.assertEqual(toggle_comment_on_line("Line to comment", 2, False, True), "# Line to comment")
+        self.assertEqual(toggle_comment_on_line("Line to comment ## toggler", '#', 1, False, True), "# Line to comment ## toggler")
         # Enforcing uncomment, on already commented line
-        self.assertEqual(toggle_comment_on_line("# Commented line", 2, True, False), "Commented line")
+        self.assertEqual(toggle_comment_on_line("# Commented line", '#', 1, True, False), "Commented line")
         # Toggling without enforcement (commenting)
-        self.assertEqual(toggle_comment_on_line("Line to toggle", 2, False), "# Line to toggle")
+        self.assertEqual(toggle_comment_on_line("Line to toggle", '#', 1, False), "# Line to toggle")
+        self.assertEqual(toggle_comment_on_line("  }                                    ## bootstrap", '#', 1, False, True), "  # }                                    ## bootstrap")
         # Toggling without enforcement (uncommenting)
-        self.assertEqual(toggle_comment_on_line("# Toggled line", 2, True), "Toggled line")
+        self.assertEqual(toggle_comment_on_line("# Toggled line ## toggler", '#', 1, True), "Toggled line ## toggler")
 
     def test_toggle_comments_with_dynamic_n(self):
         lines = [
