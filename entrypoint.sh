@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -exao pipefail
+set -eao pipefail
 
 # Concatenate all arguments into a single string
 CMD="$*"
