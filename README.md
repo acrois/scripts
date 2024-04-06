@@ -1,8 +1,8 @@
 # Scripts
 
-[![Build Image](https://github.com/acrois/scripts/actions/workflows/build.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/build.yaml) [![CalVer Tagging](https://github.com/acrois/scripts/actions/workflows/calver.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/calver.yaml)
+[![CalVer Tagging](https://github.com/acrois/scripts/actions/workflows/calver.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/calver.yaml) [![Dynamic Test Execution](https://github.com/acrois/scripts/actions/workflows/test.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/test.yaml) [![Shellcheck](https://github.com/acrois/scripts/actions/workflows/shellcheck.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/shellcheck.yaml) [![Build Image](https://github.com/acrois/scripts/actions/workflows/build.yaml/badge.svg)](https://github.com/acrois/scripts/actions/workflows/build.yaml)
 
-Shell scripts and whatnot.
+Shell scripts that power workflows used across many projects and runtime environments.
 
 ## Docker Usage
 
