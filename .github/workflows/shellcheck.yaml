@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "shell/*.sh"
+      - "shell/*"
       - "test/*"
       - ".github/workflows/shellcheck.yaml"
 env:
