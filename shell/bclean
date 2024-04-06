@@ -93,6 +93,9 @@ _main() {
         # Create test repository
         git init -b trunk "$REPO_PATH"
 
+        git -C "$REPO_PATH" config user.email "test@acrois.dev"
+        git -C "$REPO_PATH" config user.name "Test Runner"
+
         # Commit to main branch
         echo "Test" > $REPO_PATH/test.txt
         git -C "$REPO_PATH" add .
@@ -120,13 +123,14 @@ _main() {
         echo "================================="
     fi
 
-    local current_date=$(date +%Y%m%d)
+    local current_date
+    current_date=$(date +%Y%m%d)
 
     # Process branches
     for branch in $(git -C "$REPO_PATH" for-each-ref --format='%(refname)' refs/heads/); do
         branch_name="${branch/'refs/heads/'/''}"
 
-        if $(list_include_item "$KEEP_BRANCHES" "$branch_name"); then
+        if list_include_item "$KEEP_BRANCHES" "$branch_name"; then
             echo "Skipping $branch_name (kept branch)"
             continue
         fi
