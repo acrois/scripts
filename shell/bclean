@@ -38,8 +38,8 @@ usage() {
 
 # Process flags/options
 while [ "$1" != "" ]; do
-    PARAM=`echo $1 | awk -F= '{print $1}'`
-    VALUE=`echo $1 | awk -F= '{print $2}'`
+    PARAM=$(echo "$1" | awk -F= '{print $1}')
+    VALUE=$(echo "$1" | awk -F= '{print $2}')
     case $PARAM in
         --v)
             set -x
@@ -83,7 +83,7 @@ _is_sourced() {
 
 _main() {
     if [ $TEST_MODE = true ]; then
-        REPO_PATH="./test"
+        REPO_PATH="./bclean-test"
         REPO_TEST_ORIGIN="${REPO_PATH}2"
 
         # Clean up any previous test
@@ -108,7 +108,7 @@ _main() {
         git -C $REPO_PATH checkout trunk
 
         git init --bare $REPO_TEST_ORIGIN
-        git -C $REPO_PATH remote add origin "$(dirname $(readlink -e $REPO_TEST_ORIGIN))/$(basename $REPO_TEST_ORIGIN)"
+        git -C $REPO_PATH remote add origin "$(dirname "$(readlink -e $REPO_TEST_ORIGIN)")/$(basename $REPO_TEST_ORIGIN)"
         git -C $REPO_PATH push origin --all
     fi
 
