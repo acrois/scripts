@@ -19,14 +19,14 @@ jobs:
     - name: Check Tests
       uses: ludeeus/action-shellcheck@2.0.0
       with:
-        scandir: './tests'
+        scandir: './test'
         ignore_paths: >-
           output
           requirements.txt
     - name: Check Scripts
       uses: ludeeus/action-shellcheck@2.0.0
       with:
-        scandir: './scripts'
+        scandir: './shell'
         ignore_paths: >-
           __pycache__
           requirements.txt
