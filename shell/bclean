@@ -91,28 +91,28 @@ _main() {
         rm -rf $REPO_TEST_ORIGIN
 
         # Create test repository
-        git init -b trunk $REPO_PATH
+        git init -b trunk "$REPO_PATH"
 
         # Commit to main branch
         echo "Test" > $REPO_PATH/test.txt
-        git -C $REPO_PATH add .
-        git -C $REPO_PATH commit -m "Initial commit"
+        git -C "$REPO_PATH" add .
+        git -C "$REPO_PATH" commit -m "Initial commit"
 
         # Create new branch
-        git -C $REPO_PATH checkout -b test/branch
+        git -C "$REPO_PATH" checkout -b test/branch
         echo "Test Again" >> $REPO_PATH/test.txt
-        git -C $REPO_PATH add .
-        git -C $REPO_PATH commit -m "Another one"
+        git -C "$REPO_PATH" add .
+        git -C "$REPO_PATH" commit -m "Another one"
 
         # Switch to main
-        git -C $REPO_PATH checkout trunk
+        git -C "$REPO_PATH" checkout trunk
 
-        git init --bare $REPO_TEST_ORIGIN
-        git -C $REPO_PATH remote add origin "$(dirname "$(readlink -e $REPO_TEST_ORIGIN)")/$(basename $REPO_TEST_ORIGIN)"
-        git -C $REPO_PATH push origin --all
+        git init --bare "$REPO_TEST_ORIGIN"
+        git -C "$REPO_PATH" remote add origin "$(dirname "$(readlink -e $REPO_TEST_ORIGIN)")/$(basename $REPO_TEST_ORIGIN)"
+        git -C "$REPO_PATH" push origin --all
     fi
 
-    git -C $REPO_PATH fetch --all
+    git -C "$REPO_PATH" fetch --all
 
     if [ $DRY_RUN = true ]; then
         echo "================================="
@@ -120,13 +120,13 @@ _main() {
         echo "================================="
     fi
 
-    local current_date=`date +%Y%m%d`
+    local current_date=$(date +%Y%m%d)
 
     # Process branches
-    for branch in $(git -C $REPO_PATH for-each-ref --format='%(refname)' refs/heads/); do
+    for branch in $(git -C "$REPO_PATH" for-each-ref --format='%(refname)' refs/heads/); do
         branch_name="${branch/'refs/heads/'/''}"
 
-        if `list_include_item "$KEEP_BRANCHES" "$branch_name"`; then
+        if $(list_include_item "$KEEP_BRANCHES" "$branch_name"); then
             echo "Skipping $branch_name (kept branch)"
             continue
         fi
@@ -143,23 +143,23 @@ _main() {
         # Tag branch
 
         if [ $ANNOTATED_TAGS = true ]; then
-            git -C $REPO_PATH tag "archive/$current_date/$branch_name" -a -m "Archive of $branch_name on $current_date" $branch_name
+            git -C "$REPO_PATH" tag "archive/$current_date/$branch_name" -a -m "Archive of $branch_name on $current_date" "$branch_name"
         else
-            git -C $REPO_PATH tag "archive/$current_date/$branch_name" $branch_name
+            git -C "$REPO_PATH" tag "archive/$current_date/$branch_name" "$branch_name"
         fi
 
         # Delete branch
-        git -C $REPO_PATH branch -D $branch_name
+        git -C "$REPO_PATH" branch -D "$branch_name"
 
         # Delete branch from origin
         if [[ $DRY_RUN = false && $PUSH = true ]]; then
-            git -C $REPO_PATH push origin :$branch_name
+            git -C "$REPO_PATH" push origin ":$branch_name"
         fi
     done
 
     # Push tags to origin
     if [[ $DRY_RUN = false && $PUSH = true ]]; then
-        git -C $REPO_PATH push origin --tags
+        git -C "$REPO_PATH" push origin --tags
     fi
 }
 
