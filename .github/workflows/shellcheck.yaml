@@ -5,6 +5,7 @@ on:
     paths:
       - "shell/*.sh"
       - "test/*"
+      - ".github/workflows/shellcheck.yaml"
 env:
   SHELLCHECK_OPTS: -e SC1071 -e SC2148
 jobs:
