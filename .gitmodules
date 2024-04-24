@@ -8,3 +8,6 @@
 [submodule ".github/template/terraform-prepare"]
 	path = .github/template/terraform-prepare
 	url = git@github.com:acrois/terraform-prepare
+[submodule ".github/template/docker-compose-deploy"]
+	path = .github/template/docker-compose-deploy
+	url = git@github.com:acrois/docker-compose-deploy
