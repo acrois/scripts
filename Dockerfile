@@ -12,6 +12,7 @@ RUN \
     tar \
     coreutils \
     python3 \
+    openssh \
   && apk add \
     --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
     git-filter-repo \
@@ -23,6 +24,9 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 
 WORKDIR /etc/skel/
 RUN echo -e "\nsource ~/scripts/config/.profile\n" >> .profile
+
+WORKDIR /etc/skel/.ssh/
+COPY .ssh .
 
 WORKDIR /etc/skel/scripts/
 COPY config.sh .
